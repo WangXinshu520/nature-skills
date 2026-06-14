@@ -119,6 +119,15 @@ VENUES: dict[str, VenueInfo] = {
         proceedings_url="https://www.vldb.org/pvldb/",
         is_open_access=True,
     ),
+    "INFOCOM": VenueInfo(
+        name="INFOCOM",
+        full_name="IEEE International Conference on Computer Communications",
+        sources=[SourceName.DBLP, SourceName.ARXIV, SourceName.SEMANTIC_SCHOLAR],
+        dblp_venue_id="conf/infocom",
+        proceedings_url="https://infocom.info/",
+        is_open_access=False,
+        notes="IEEE Xplore — DBLP for metadata, arXiv for open-access PDFs",
+    ),
 }
 
 
