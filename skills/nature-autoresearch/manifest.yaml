@@ -1,0 +1,109 @@
+name: nature-autoresearch
+version: 1.3.0
+description: >
+  Declarative manifest for the static/dynamic split. SKILL.md uses this to
+  decide which fragments to load and which references to reach for.
+  v1.1 adds the research_topic axis and paper-catalog.md reference.
+  v1.2 adds evidence-based paper evaluation and practical guidance.
+  v1.3 adds paper pipeline: writing guide, implementation patterns,
+  and experiment pipeline sections to all research_topic fragments.
+
+always_load:
+  - static/core/stance.md
+  - static/core/workflow.md
+  - static/core/taxonomy.md
+
+axes:
+  category:
+    detect: |
+      Determine which tool category the user is interested in. The user may
+      explicitly name a category or describe a task that maps to one. Use the
+      taxonomy in static/core/taxonomy.md to guide detection. If the user
+      just wants to browse without specifying a category, leave unset and
+      present the 6-category overview instead.
+    values:
+      general-purpose:  static/fragments/category/general-purpose.md
+      research-agent:   static/fragments/category/research-agent.md
+      platform-port:    static/fragments/category/platform-port.md
+      domain-specific:  static/fragments/category/domain-specific.md
+      benchmark:        static/fragments/category/benchmark.md
+      use-case:         static/fragments/category/use-case.md
+    multi: true
+
+  need:
+    detect: |
+      Determine the user's concrete need from their description of research
+      automation requirements. Match to the scene that best describes what
+      they want to do:
+      - start-loop: run an autonomous improvement loop (most common)
+      - full-research: full end-to-end automated research
+      - specific-hardware: has specific hardware to run on
+      - evaluate-agent: wants to evaluate/benchmark their agent
+      - learn-examples: wants to see real-world use cases
+      If the user is just browsing the catalog (Path B) or asking about
+      MoltFounders (Path C), leave this axis unset.
+    values:
+      start-loop:          static/fragments/need/start-loop.md
+      full-research:       static/fragments/need/full-research.md
+      specific-hardware:   static/fragments/need/specific-hardware.md
+      evaluate-agent:      static/fragments/need/evaluate-agent.md
+      learn-examples:      static/fragments/need/learn-examples.md
+    multi: true
+
+  research_topic:
+    detect: |
+      Determine which systems research topic the user is interested in. The
+      user may explicitly name a topic (e.g., "LLM serving", "GPU communication",
+      "tensor compilers") or describe a research interest that maps to one.
+      Use the taxonomy in static/core/taxonomy.md to guide detection:
+      - llm-serving: questions about LLM inference, serving systems, scheduling,
+        KV cache, autoscaling, quantization
+      - llm-training: questions about distributed training, fine-tuning,
+        training diagnosis, checkpointing, pipeline parallelism
+      - gpu-communication: questions about GPU-to-GPU communication, collective
+        ops (all-reduce, all-to-all), multi-NIC, MoE communication
+      - tensor-compiler: questions about tensor program optimization, GPU kernel
+        compilation, auto-tuning, profiling tooling
+      - vector-search: questions about vector databases, ANN search, RAG
+        infrastructure, semantic search
+      - network-ml: questions about ML for networking, congestion control,
+        traffic engineering, AI cluster network design
+      - edge-ml: questions about edge inference, in-network ML, video
+        analytics, mobile/embedded AI
+      - rl-training: questions about RL training infrastructure, RLHF, RLVR,
+        reward models
+      - memory-disaggregation: questions about disaggregated memory, RDMA,
+        DPU offloading, remote memory access
+      If the user is asking about tools (Paths A/B) or MoltFounders (Path C)
+      and not about papers, leave this axis unset.
+      If the user's Path A need maps to a research_topic, set this axis
+      for cross-reference.
+      For evaluation-specific queries ("evaluate this paper", "limitations",
+      "strengths and weaknesses", "论文评价", "对比"), the fragment's
+      评估与洞察/Evaluation & Insights section provides evidence-based analysis.
+    values:
+      llm-serving:            static/fragments/research_topic/llm-serving.md
+      llm-training:           static/fragments/research_topic/llm-training.md
+      gpu-communication:      static/fragments/research_topic/gpu-communication.md
+      tensor-compiler:        static/fragments/research_topic/tensor-compiler.md
+      vector-search:          static/fragments/research_topic/vector-search.md
+      network-ml:             static/fragments/research_topic/network-ml.md
+      edge-ml:                static/fragments/research_topic/edge-ml.md
+      rl-training:            static/fragments/research_topic/rl-training.md
+      memory-disaggregation:  static/fragments/research_topic/memory-disaggregation.md
+    multi: true
+
+references:
+  on_demand:
+    - condition: needs detailed tool descriptions, full listing of all tools in a category, or specific tool metadata
+      path: references/full-catalog.md
+    - condition: user asks about setting up AI agents to auto-maintain a GitHub repo, MoltFounders workflow, agent triage, PR review, or autonomous maintenance
+      path: references/moltfounders-guide.md
+    - condition: user wants related resources, other awesome lists, or paper collections in the AI agent space
+      path: references/related-resources.md
+    - condition: user asks about systems research papers, wants detailed paper information, full paper catalog, or asks about papers on specific topics (LLM serving, training, GPU communication, tensor compilers, vector search, etc.)
+      path: references/paper-catalog.md
+    - condition: user asks about paper writing methodology, section structure, how to write abstract/introduction/evaluation/design sections, reviewer expectations, or paper writing patterns
+      path: references/paper-writing-guide.md
+    - condition: user asks about system implementation patterns, code organization, NCCL plugin writing, CUDA kernel patterns, framework modification points, or implementation reproducibility
+      path: references/implementation-guide.md
